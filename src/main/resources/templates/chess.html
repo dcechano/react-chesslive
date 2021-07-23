@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <script src="https://kit.fontawesome.com/9162a0353b.js" crossorigin="anonymous"></script>
+    <script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
+    <script src="/webjars/sockjs-client/1.0.2/sockjs.min.js"></script>
+    <script defer th:src="@{/js/node_modules/chess.js/chess.js}"></script>
+    <script defer th:src="@{/js/node_modules/jquery/dist/jquery.js}"></script>
+    <script defer th:src="@{/js/chess_bundle/chess_bundle.js}"></script>
+
+    <link rel="stylesheet" th:href="@{/css/chessground/chessground.css}">
+    <link rel="stylesheet" th:href="@{/css/chessground/chessground2.css}">
+    <link rel="stylesheet" th:href="@{/css/chessground/chessground3.css}">
+    <link rel="stylesheet" th:href="@{/css/chess.css}">
+    <title>Let's Play Chess</title>
+
+    </head>
+<body>
+<input type="hidden" id="gameAsJSON" th:value="${gameAsJSON}">
+
+<nav class="nav">
+    <ul class="nav-links">
+        <li class="nav-link"><a th:href="@{'/user/' + ${session.user.username}}" th:text="${session.user.username}" class="profile-link"></a></li>
+        <li class="nav-link"><a th:href="@{/}">Home</a></li>
+        <li class="nav-link endgame"><i class="fa fa-hands-helping"></i>
+            <div class="end-buttons">
+                <a id="offer_draw" href="#" class="draw">Draw</a>
+                <a id="resign" href="#" class="resign">Resign</a>
+                <div class="window-close">
+                    <span class="fa fa-window-close"></span>
+                </div>
+            </div>
+        </li>
+        <li id="close-nav" class="nav-link">
+            <span class="fa fa-window-close"></span>
+        </li>
+
+    </ul>
+    <button id="nav-button"><i class="fa fa-chevron-down"></i></button>
+
+</nav>
+
+<main class="container">
+
+    <div id="player2-info" class="user-info">
+        <div id="opponent" class="username"
+             th:text="${game.white.username eq user.username ? game.black.username : game.white.username}">
+        </div>
+
+        <div id="clock1" class="black-clock clock"
+             th:text="${game.timeControl.minutes + ':00'}"></div>
+    </div>
+    <div id="board"></div>
+
+    <div id="player1-info" class="user-info">
+        <div id="you" class="username" th:text="${user.username}">SirRobin95</div>
+        <div id="clock2" class="white-clock clock" th:text="${game.timeControl.minutes + ':00'}"></div>
+    </div>
+    <ol id="pgn">Waiting for the first move!</ol>
+
+<nav class="logs-nav">
+    <ul class="log-links">
+        <li id="chat-link" class="widget-link selected" data-for="chat-log"><span class="fa fa-comments"></span></li>
+        <li id="notes-link" class="widget-link" data-for="notes-log"><span class="fa fa-sticky-note"></span></li>
+        <li id="pgn-link" class="widget-link" data-for="pgn-log"><span class="fa fa-chess-pawn"></span></li>
+    </ul>
+</nav>
+<section class="logs">
+    <div id="chat-log" class="log active">
+        <ol id="chat-messages" class="log-window">
+        </ol>
+        <div class="input-wrap">
+            <button id="chat-button" class="send-button" type="submit"><span class="fa fa-paper-plane"></span></button>
+            <input id="chat-input" type="text" class="input" placeholder="Be nice!">
+        </div>
+    </div>
+    <div id="notes-log" class="log">
+        <ol id="notes" class="log-window">
+        </ol>
+        <div class="input-wrap">
+        <button id="notes-button" class="send-button" type="submit"><span class="fa fa-paper-plane"></span></button>
+            <input id="notes-input" type="text" class="input" placeholder="Observations?">
+        </div>
+    </div>
+    <div id="pgn-log" class="log">
+        <ol id="pgn-long-form" class="log-window">
+
+        </ol>
+    </div>
+    <div id="game_result" class="log">
+        <p id="result" class="log-window"></p>
+    </div>
+    <div id="draw_decision" class="log">
+        <div class="log-window">
+            <p>You're opponent has offered a draw</p>
+            <div id="accept" class="decision">Accept</div>
+            <div id="decline" class="decision">Decline</div>
+        </div>
+    </div>
+</section>
+</main>
+
+
+</body>
+</html>

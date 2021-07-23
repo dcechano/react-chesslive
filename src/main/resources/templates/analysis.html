@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <script src="https://kit.fontawesome.com/9162a0353b.js" crossorigin="anonymous"></script>
+    <script defer th:src="@{/js/node_modules/chess.js/chess.js}"></script>
+    <script defer th:src="@{/js/node_modules/jquery/dist/jquery.js}"></script>
+    <script defer th:src="@{/js/analysis_bundle/analysis_bundle.js}"></script>
+
+
+    <link rel="stylesheet" th:href="@{/css/chessground/chessground.css}">
+    <link rel="stylesheet" th:href="@{/css/chessground/chessground2.css}">
+    <link rel="stylesheet" th:href="@{/css/chessground/chessground3.css}">
+    <link rel="stylesheet" th:href="@{/css/analysis.css}">
+    <title>Analysis</title>
+</head>
+<body>
+
+<input type="hidden" id="gameAsJSON" th:value="${gameAsJSON}">
+
+<nav class="nav">
+    <ul class="nav-links">
+        <li class="nav-link" sec:authorize="isAuthenticated()">
+            <a class="profile-link" th:href="@{'/user/' + session.user.username}" th:text="${session.user.username}"></a>
+        </li>
+        <li id="github" class="nav-link">
+            <a href="https://github.com/dcechano/ChessLive"><i class="fa fa-chess-queen"></i></a>
+        </li>
+        <li class="nav-link"><a th:href="@{/}">Home</a></li>
+        <li id="login" class="nav-link" sec:authorize="!isAuthenticated()">
+            <a th:href="@{/login}">Login</a>
+        </li>
+        <li class="nav-link" sec:authorize="isAuthenticated()">
+            <a th:href="@{/logout}">Logout</a>
+        </li>
+    </ul>
+</nav>
+<main class="container">
+
+    <div id="player2-info" class="user-info">
+        <div id="opponent" class="username" th:text="${game.black.username}"></div>
+    </div>
+
+    <div id="board"></div>
+
+    <div id="player1-info" class="user-info">
+        <div id="you" class="username" th:text="${game.white.username}"></div>
+    </div>
+
+    <nav class="logs-nav">
+        <ul class="log-links">
+            <li id="FEN-link" class="widget-link selected" data-for="FEN-log"><span class="fa fa-chess-pawn"></span></li>
+        </ul>
+    </nav>
+    <section class="logs">
+        <div id="pgn-log" class="log active">
+            <ol id="pgn-long-form" class="log-window"></ol>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans+SC:wght@700&display=swap');
+.header {
+    width: auto;
+    height: 4rem;
+    display: flex;
+    padding: 0 10%;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #008080;
+    margin-bottom: 1rem;
+}
+
+.logo {
+    font-size: 2rem;
+    color: white;
+    font-family: 'Encode Sans SC', sans-serif;
+}
+
+.nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.nav li {
+    margin-left: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #88dfdf;
+}
+
+.nav a:hover,
+.nav a:active,
+.nav a.active {
+    color: #e6fcfc;
+}

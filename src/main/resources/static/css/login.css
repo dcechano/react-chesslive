@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100;200;300&display=swap');
+
+:root {
+
+    --thin: 'Work Sans', sans-serif;
+
+    --darkLightBlue: #92BADD;
+    --darkBlue: #2c5784;
+    --shadowBlue: #254e70;
+    --secondaryColor: #2c578a;
+    --accent: #861657;
+    --lightBlue: #bdd5ea;
+    --white: #f7f7ff;
+    font-weight: 300;
+
+}
+body, html{
+    min-height: 100%;
+}
+
+body{
+    background-image: url("../images/hassan-pasha-7SjEuEF06Zw-unsplash.jpg");
+    background-size: cover;
+    background-position: bottom;
+    color: var(--white);
+    font-family: var(--thin);
+    letter-spacing: 1.5px;
+    font-size: 1.2rem;
+
+}
+
+.container {
+    margin: auto;
+    width: auto;
+}
+
+.error {
+    padding: 15px;
+    background: rgba(220, 53, 69, 0.9);
+    color: white;
+    border-radius: 4px;
+}
+
+form {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    width: auto;
+    height: auto;
+    color: var(--white);
+    text-align: center;
+    margin: auto;
+}
+
+.card{
+    width: auto;
+    margin: auto;
+}
+
+form * {
+    margin: 10px;
+}
+
+.header {
+    text-align: center;
+    padding: 20px;
+    font-weight: 200;
+}
+
+.form-group{
+    font-size: 20px;
+}
+
+label{
+    display: block;
+}
+
+
+input{
+    height: 30px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, .1);
+    border: none;
+    color: var(--white);
+    font-family: unset;
+    letter-spacing: unset;
+}
+
+input[type="submit"]{
+    display: block;
+    margin: auto;
+    color: var(--white);
+    width: 75%;
+    background-color: var(--secondaryColor);
+
+}
+
+input[type="submit"]:hover{
+    cursor: pointer;
+}
+
+a, a:visited {
+    text-decoration: none;
+    color: white;
+    font-weight: 400;
+    font-size: 15px;
+    background-color: inherit;
+    padding: 0 5px;
+    border-radius: 4px;
+}
+
+@media screen and (min-width: 500px){
+    body{
+        font-size: 1.5rem;
+    }
+
+    label{
+        display: unset;
+    }
+}
+
+@media screen and (min-width: 600px){
+    form{
+        margin-top: 50px;
+    }
+}
+
+@media screen and (min-width: 900px){
+    form{
+        margin-top: 75px;
+    }
+}
