@@ -29,15 +29,17 @@ public class JWTUtils {
     }
 
     public JWS createToken(AuthenticationRequest authenticationRequest) {
-        Map<String, Object> claims = Map.of(Claims.EXPIRATION, Date.from(Instant.now().plusMillis(1000 * 60 * 60 * 12)),
+        final Date expirationDate = Date.from(Instant.now().plusMillis(1000 * 60 * 60 * 6)); // expires in 6hrs
+
+        final Map<String, Object> claims = Map.of(Claims.EXPIRATION, expirationDate,
                 Claims.ISSUED_AT, Date.from(Instant.now()), Claims.SUBJECT, authenticationRequest.getUsername());
 
-        String jwtString = Jwts.builder()
+        final String jwtString = Jwts.builder()
                 .setClaims(claims)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        return new JWS(jwtString);
+        return new JWS(jwtString, expirationDate);
     }
 
     public Jws<Claims> parse(String token) {

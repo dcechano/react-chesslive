@@ -28,7 +28,6 @@ public class APIController {
 
 
     public APIController(AuthenticationManager authenticationManager, JWTUtils jwtUtils) {
-
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
     }
@@ -38,6 +37,7 @@ public class APIController {
         logger.info("===================/authenticate endpoint hit===================");
         String username = authenticationRequest.getUsername();
         String password = authenticationRequest.getPassword();
+        logger.info("Logging log in credentials: " + username + " " + password);
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password));
 
