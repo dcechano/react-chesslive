@@ -1,74 +1,75 @@
-import {useRef, useState} from "react";
+import {useContext, useRef, useState} from "react";
+
+import classes from './Login.module.css';
+import generalClasses from '../index.module.css';
+import {useHistory} from "react-router-dom";
+import AuthContext from "../store/auth-context";
 
 const Login = props => {
 
+    const context = useContext(AuthContext);
+
     const usernameRef = useRef();
     const passwordRef = useRef();
-    const [jwt, setJwt] = useState(null);
+    const [error, setError] = useState(false);
+    const [loading, isLoading] = useState(false);
+    const history = useHistory();
 
     const onSubmitHandler = event => {
         event.preventDefault();
+        setError(false);
         login();
+        history.push('/chesslive');
+    };
+
+    const cancelButtonHandler = event => {
+        history.push('/chesslive');
     };
 
     const login = async () => {
         try {
+            const username = usernameRef.current.value;
+            const password = passwordRef.current.value;
             const response = await fetch("http://localhost:8080/api/authenticate", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-
                 body: JSON.stringify({
-                    username: 'jane',
-                    password: 'password'
+                    username: username,
+                    password: password
                 })
             });
+
             if (!response.ok) {
-            // Handle error on UI
-            }
-
-            const body = await response.json();
-
-            console.log(`First response body: ${JSON.stringify(body)}`);
-            console.log(body.jwt)
-            console.log(JSON.stringify(body.jwt));
-            console.log(typeof body.jwt);
-            setJwt(body.jwt);
-
-            const response2 = await fetch("http://localhost:8080/api/game/gameID", {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: `Bearer ${body.jwt}`
+                if (response.status === 403) {
+                    setError(true);
                 }
-            });
-
-            console.log(response);
-            if (!response2.ok) {
-                console.log("Second request failed");
+                return;
             }
-
-            const body2 = await response2.json();
-
-            console.log(`Second response body: ${JSON.stringify(body2)}`);
-
+            const body = await response.json();
+            context.login(body.jwt, body.expirationDate, username);
         } catch (e) {
             console.log(e);
         }
     };
 
     return (
-        <form onSubmit={onSubmitHandler}>
-            <div>
+        <form onSubmit={onSubmitHandler} className={generalClasses['margin-auto']}>
+            <h2 className={generalClasses.center}>Login</h2>
+            <div className={classes['form-group']}>
                 <label htmlFor="username">Username</label>
                 <input ref={usernameRef} id='username' type="text"/>
             </div>
-            <div>
+            <div className={classes['form-group']}>
                 <label htmlFor="password">Password</label>
-                <input ref={passwordRef} id='password' type="text"/>
+                <input ref={passwordRef} id='password' type="password"/>
             </div>
-            <button type='submit'>Submit</button>
+
+            <div className={classes['button-group']}>
+                <button type='submit' className={classes.btn}>Submit</button>
+                <button className={classes.btn} onClick={cancelButtonHandler}>Cancel</button>
+            </div>
         </form>
     );
 };

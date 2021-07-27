@@ -1,21 +1,26 @@
-import {NavLink} from "react-router-dom";
+import {NavLink, useLocation} from "react-router-dom";
 import classes from "./Navigation.module.css";
+import {useContext} from "react";
+import AuthContext from "../store/auth-context";
 
 const Navigation = props => {
+    const location = useLocation();
+    const context = useContext(AuthContext);
+
+    const profileLink = <li><NavLink activeClassName={classes.active} to='/chesslive/profile'>{context.username}</NavLink></li>;
+    const loginLink = <li><NavLink activeClassName={classes.active} to='/chesslive/login'>Login</NavLink></li>;
+
     return (
         <header className={classes.header}>
-            <div className={classes.logo}>ChessLive</div>
+            <div className={classes.logo}><NavLink activeClassName={classes.active} to='/chesslive'>ChessLive</NavLink></div>
             <nav className={classes.nav}>
                 <ul>
                     <li>
                         {/*TODO this URI path is likely to change*/}
-                        <NavLink to='/play'>Play</NavLink>
+                        <NavLink activeClassName={classes.active} to='/chesslive/play'>Play</NavLink>
                     </li>
-                    <li>
-
-                        <NavLink to='/profile'>Profile</NavLink>
-                    </li>
-                    {/*    TODO Put in Log in link when authentication is ready*/}
+                    {context.isLoggedIn ? profileLink : loginLink}
+                    {context.isLoggedIn && <li><button className={classes.btn} onClick={context.logout}>Logout</button></li>}
                 </ul>
             </nav>
         </header>
