@@ -1,5 +1,13 @@
 .landing{
     display: flex;
-    flex-direction: row;
+    flex-direction: column-reverse;
     justify-content: space-around;
 }
+
+@media screen and (min-width: 500px){
+    .landing {
+        display: flex;
+        flex-direction: row;
+    }
+}
+

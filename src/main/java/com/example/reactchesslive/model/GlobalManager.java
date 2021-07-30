@@ -4,6 +4,7 @@ import com.example.reactchesslive.db.repo.PlayerRepo;
 import com.example.reactchesslive.db.repo.h2.GameRepo;
 import com.example.reactchesslive.db.repo.h2.PairedPlayersRepo;
 import com.example.reactchesslive.db.repo.h2.WaitListRepo;
+import com.example.reactchesslive.ex.GameMatcherTimeoutException;
 import com.example.reactchesslive.model.entity.Game;
 import com.example.reactchesslive.model.entity.Player;
 import com.example.reactchesslive.model.entity.TimeControl;
@@ -28,7 +29,22 @@ public class GlobalManager {
 
     private GameRepo gameRepo;
 
-    private Game awaitChallenge(Player player, TimeControl timeControl) {
+    private static Game createGame(Player player1, Player player2) {
+        Game game = new Game();
+        game.setId(UUID.randomUUID().toString());
+        if (System.currentTimeMillis() % 2 == 0) {
+            game.setWhite(player1);
+            game.setBlack(player2);
+        } else {
+            game.setBlack(player1);
+            game.setWhite(player2);
+        }
+
+        return game;
+    }
+
+    private Game awaitChallenge(Player player, TimeControl timeControl) throws GameMatcherTimeoutException{
+        long timeoutTime = System.currentTimeMillis() + 15000;
 
         WaitingPlayer matchedPlayer = waitListRepo.getWaitingPlayerByTimeControl(timeControl, player.getId());
         if (matchedPlayer == null) {
@@ -42,6 +58,10 @@ public class GlobalManager {
                 while (matchedPlayer == null) {
                     if (pairedPlayersRepo.isPaired(player)) {
                         return null;
+                    }
+                    if (System.currentTimeMillis() > timeoutTime) {
+                        waitListRepo.deleteById(waitId);
+                        throw new GameMatcherTimeoutException("Match maker timed out!");
                     }
                     matchedPlayer = waitListRepo.getWaitingPlayerByTimeControl(timeControl, player.getId());
                 }
@@ -68,21 +88,6 @@ public class GlobalManager {
         TimeControl time = TimeControl.valueOf(timeControl);
         return awaitChallenge(player, time);
     }
-
-    private static Game createGame(Player player1, Player player2) {
-        Game game = new Game();
-        game.setId(UUID.randomUUID().toString());
-        if (System.currentTimeMillis() % 2 == 0) {
-            game.setWhite(player1);
-            game.setBlack(player2);
-        } else {
-            game.setBlack(player1);
-            game.setWhite(player2);
-        }
-
-        return game;
-    }
-
 
     @Autowired
     public void setPlayerRepo(@Qualifier("h2PlayerRepo") PlayerRepo playerRepo) {

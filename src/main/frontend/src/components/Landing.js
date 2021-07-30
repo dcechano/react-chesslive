@@ -11,12 +11,12 @@ const Landing = props => {
 
 
     window.onresize = () => {
+
         setBoardSize(Math.min(window.innerWidth - 75, 400));
     };
 
     return (
         <section className={classes.landing}>
-
             <Card className={generalClasses.width50}>
                 <h4 className={generalClasses.center}>Carlsen v. Caruana 2020</h4>
                 <Chessground style={{margin: 'auto'}}
@@ -24,8 +24,9 @@ const Landing = props => {
                              width={boardSize}
                 />
             </Card>
-            <Card className={generalClasses.width25}>
-                <FindMatch/>
+            {/*<Card className={generalClasses.width25}>*/}
+            <Card>
+                <FindMatch setGame={props.setGame}/>
             </Card>
         </section>
     );
