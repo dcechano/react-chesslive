@@ -3,6 +3,7 @@ import React, {useState} from "react";
 const AuthContext = React.createContext({
     username: '',
     isLoggedIn: false,
+    token: null,
     login: (token, expirationDate, username) =>{},
     logout: () => {}
 });
@@ -23,6 +24,7 @@ export const AuthContextProvider = props => {
     const loginHandler = (token, expirationDate, username) => {
         setIsLoggedIn(true);
         setUsername(username);
+        setJwt(token);
         localStorage.setItem('jwt', token);
         localStorage.setItem('expirationDate', expirationDate);
         localStorage.setItem('username', username);
@@ -43,7 +45,7 @@ export const AuthContextProvider = props => {
 
     const context = {
         username: username,
-        token: null,
+        token: jwt,
         isLoggedIn: isLoggedIn,
         login: loginHandler,
         logout: logoutHandler

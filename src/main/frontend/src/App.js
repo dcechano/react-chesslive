@@ -1,5 +1,5 @@
 import './App.css';
-import {Fragment, useContext, useEffect} from "react";
+import {Fragment, useContext, useEffect, useState} from "react";
 import {Redirect, Route, Switch} from 'react-router-dom';
 import Navigation from "./layout/Navigation";
 import LiveGame from "./components/LiveGame";
@@ -12,6 +12,7 @@ import AuthContext from "./store/auth-context";
 function App() {
 
     const context = useContext(AuthContext);
+    const [currentGame, setCurrentGame] = useState(null);
     // Run once! Check if user has a valid token in browser
     useEffect(() => {
         const now = new Date().getTime();
@@ -36,13 +37,13 @@ function App() {
             <Layout>
                 <Switch>
                     <Route path='/chesslive' exact>
-                        <Landing/>
+                        <Landing setGame={setCurrentGame}/>
                     </Route>
                     <Route path='/chesslive/login'>
                         <Modal><Login/></Modal>
                     </Route>
                     <Route path='/chesslive/:gameId'>
-                        <LiveGame/>
+                        <LiveGame game={currentGame}/>
                     </Route>
                     <Route path='*'>
                         <Redirect to='/chesslive'/>
