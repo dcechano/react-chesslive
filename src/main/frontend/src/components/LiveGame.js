@@ -1,16 +1,18 @@
+import React, {useState} from 'react';
 import Chessground from "react-chessground";
 import "react-chessground/dist/styles/chessground.css";
 import Chess from 'chess.js';
-import {useState} from "react";
 import Card from "../UI/Card";
 import classes from './LiveGame.module.css';
 import cardClasses from '../UI/Card.module.css';
+import GameUpdate from "../model/GameUpdate";
 
 
 const LiveGame = props => {
 
     const [chess, setChess] = useState(new Chess());
     const game = props.game;
+    const { stompClient } = props;
 
     const move = (from, to) => {
         const moveObj = chess.move({from: from, to: to});
@@ -22,9 +24,13 @@ const LiveGame = props => {
                 dests: getValidMoves(chess),
             }
 
-            // TODO Send the move!
+
+
             return {...prevConfig};
         });
+        // TODO Send the move!
+        const gameUpdate = new GameUpdate('Me', 'You', `${from}-${to}`);
+        stompClient.send('/app/updateOpponent', {}, JSON.stringify(gameUpdate));
     };
 
     const getValidMoves = chess => {
@@ -63,34 +69,34 @@ const LiveGame = props => {
             events: {}
         },
         events: {
-            move: (orig, dest) => {
-                let moveObj = chess.move({from: orig, to: dest});
-                if (chess.game_over()) {
-                    processGameOver();
-                }
-
-
-                let config = {
-                    turnColor: sideToMove(chess),
-                    movable: {
-                        dests: getValidMoves(chess)
-                    }
-                }
-                board.set(config);
-                if (!(chess.turn() === color.charAt(0))) {
-                    myClock.pause();
-                    opponentClock.resume();
-                    let gameUpdate = new GameUpdate(me.textContent,
-                        opponent.textContent,
-                        `${orig}-${dest}`,
-                        chess.fen(),
-                        myClock.seconds);
-
-                    sendData(gameUpdate);
-                }
-                moveList.push(moveObj.san);
-                updatePgnLog();
-            }
+            // move: (orig, dest) => {
+            //     let moveObj = chess.move({from: orig, to: dest});
+            //     if (chess.game_over()) {
+            //         processGameOver();
+            //     }
+            //
+            //
+            //     let config = {
+            //         turnColor: sideToMove(chess),
+            //         movable: {
+            //             dests: getValidMoves(chess)
+            //         }
+            //     }
+            //     board.set(config);
+            //     if (!(chess.turn() === color.charAt(0))) {
+            //         myClock.pause();
+            //         opponentClock.resume();
+            //         let gameUpdate = new GameUpdate(me.textContent,
+            //             opponent.textContent,
+            //             `${orig}-${dest}`,
+            //             chess.fen(),
+            //             myClock.seconds);
+            //
+            //         sendData(gameUpdate);
+            //     }
+            //     moveList.push(moveObj.san);
+            //     updatePgnLog();
+            // }
         }
     };
 

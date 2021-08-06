@@ -1,5 +1,5 @@
+import React, {useContext} from 'react';
 import classes from './FindMatch.module.css';
-import {useContext} from "react";
 import AuthContext from "../store/auth-context";
 import {useHistory} from "react-router-dom";
 

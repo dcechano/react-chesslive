@@ -15,12 +15,14 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller
+@CrossOrigin(value = "http://localhost:3000", allowCredentials = "true")
 public class WebSocketController {
 
     private final SimpMessagingTemplate messagingTemplate;

@@ -1,3 +1,4 @@
+// noinspection DuplicatedCode
 class GameUpdate {
 
     constructor(from, to, newMove, newPosition, seconds) {
@@ -25,4 +26,4 @@ class GameUpdate {
     }
 }
 
-module.exports = GameUpdate;
+export default GameUpdate;

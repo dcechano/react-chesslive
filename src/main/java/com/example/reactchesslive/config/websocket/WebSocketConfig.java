@@ -5,6 +5,7 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.server.HandshakeHandler;
 
 
 @Configuration
@@ -19,7 +20,20 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/chess-lite")
+        HandshakeHandler handshakeHandler = (request, response, wsHandler, attributes) -> {
+            System.out.println("Inside the websocket Handshake handler");
+            return true;
+        };
+
+        registry
+                .addEndpoint("/chess-lite")
+                .setHandshakeHandler(handshakeHandler)
+                        .setAllowedOrigins("http://localhost:3000", "https://localhost:3000", "ws://localhost:3000");
+
+        registry
+                .addEndpoint("/chess-lite")
+                .setHandshakeHandler(handshakeHandler)
+                .setAllowedOrigins("http://localhost:3000", "https://localhost:3000", "ws://localhost:3000")
                 .withSockJS();
     }
 }
