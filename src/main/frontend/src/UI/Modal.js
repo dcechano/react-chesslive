@@ -1,5 +1,5 @@
+import React, {Fragment} from 'react';
 import classes from "./Modal.module.css";
-import {Fragment} from "react";
 import * as ReactDOM from "react-dom";
 
 const Backdrop = props => {

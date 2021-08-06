@@ -1,6 +1,6 @@
+import React, {useState} from 'react';
 import Chessground from "react-chessground/chessground";
 import FindMatch from "./FindMatch";
-import {useState} from "react";
 import Card from "../UI/Card";
 import classes from './Landing.module.css';
 import generalClasses from '../index.module.css';

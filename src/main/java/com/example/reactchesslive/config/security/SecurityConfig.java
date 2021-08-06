@@ -18,6 +18,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.logging.Logger;
+
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -36,8 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    TODO re-evaluate these paths to make sure they are still relevant
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/images/**",
-                "/css/**", "/js/**", "/webjars/**", "/svg/**");
+//        web.ignoring().antMatchers("/images/**",
+//                "/css/**", "/js/**", "/webjars/**", "/svg/**");
+        web.ignoring().antMatchers("/static/**", "/webjars/**", "build/**",
+                "/chess-lite/**");
     }
 
     @Override
@@ -47,20 +52,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-//        http.exceptionHandling()
-//                .authenticationEntryPoint(
-//                        (request, response, ex) -> {
-//                            response.sendError(
-//                                    HttpServletResponse.SC_UNAUTHORIZED,
-//                                    ex.getMessage()
-//                            );
-//                        }
-//                );
+
+        http.exceptionHandling()
+                .authenticationEntryPoint(
+                        (request, response, ex) -> {
+                            response.sendError(
+                                    HttpServletResponse.SC_UNAUTHORIZED,
+                                    ex.getMessage()
+                            );
+                            Logger.getLogger(getClass().toString()).info(ex.getMessage());
+                        }
+                );
 
         // TODO modify these endpoints so they are app specific
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/api/authenticate").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/secret").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
+                .antMatchers(HttpMethod.GET, "/chesslive", "/chess-lite/**").permitAll()
                 .anyRequest().authenticated();
 
 

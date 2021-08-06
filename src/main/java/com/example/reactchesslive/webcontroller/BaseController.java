@@ -4,23 +4,11 @@ import com.example.reactchesslive.db.repo.PlayerRepo;
 import com.example.reactchesslive.db.repo.h2.GameRepo;
 import com.example.reactchesslive.db.repo.mysql.StatsRepo;
 import com.example.reactchesslive.model.GlobalManager;
-import com.example.reactchesslive.model.dto.GameDTO;
-import com.example.reactchesslive.model.entity.Game;
-import com.example.reactchesslive.model.entity.Player;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
-import java.time.LocalDate;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.logging.Logger;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class BaseController {

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 
 const AuthContext = React.createContext({
     username: '',
@@ -21,7 +21,7 @@ export const AuthContextProvider = props => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState(null);
 
-    const loginHandler = (token, expirationDate, username) => {
+    const loginHandler = useCallback((token, expirationDate, username) => {
         setIsLoggedIn(true);
         setUsername(username);
         setJwt(token);
@@ -32,16 +32,16 @@ export const AuthContextProvider = props => {
         //TODO remove log
         console.log(`Remaining Time: ${remainingTime}`);
         setTimeout(logoutHandler, remainingTime);
-    };
+    }, []);
 
-    const logoutHandler = () => {
+    const logoutHandler = useCallback(() => {
         console.log('Logging user out');
         setJwt(null);
         setIsLoggedIn(false);
         localStorage.removeItem('jwt');
         localStorage.removeItem('expirationDate');
         localStorage.removeItem('username');
-    };
+    }, []);
 
     const context = {
         username: username,

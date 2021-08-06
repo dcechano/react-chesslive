@@ -8,12 +8,10 @@ import org.springframework.security.config.annotation.web.socket.AbstractSecurit
 @Configuration
 public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBrokerConfigurer {
 
+//    TODO remove comments or uncomment
     @Override
     protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
-        messages.simpDestMatchers("/secured/**", "/user/**")
-                .authenticated()
-                .anyMessage().authenticated()
-                .simpSubscribeDestMatchers("/topic/**").authenticated();
+        messages.anyMessage().permitAll();
 
         messages.simpTypeMatchers(SimpMessageType.CONNECT, SimpMessageType.SUBSCRIBE,
                 SimpMessageType.UNSUBSCRIBE, SimpMessageType.DISCONNECT,
